@@ -10,7 +10,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap" rel="stylesheet" />
+        <link
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          rel="stylesheet"
+        />
       </head>
       <body>
         <Navbar />
@@ -19,4 +22,3 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
-
