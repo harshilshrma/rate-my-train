@@ -1,6 +1,11 @@
+"use client"
+
 import Link from 'next/link';
+import { useSession, signIn, signOut } from "next-auth/react";
 
 export default function Navbar() {
+    const { data: session } = useSession();
+
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <Link href="/" className="navbar-brand">
