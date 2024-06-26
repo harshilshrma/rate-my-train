@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import Link from 'next/link';
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -29,10 +29,21 @@ export default function Navbar() {
                             Home
                         </Link>
                     </li>
+
                     <li className="nav-item">
                         <Link href="/submit-review" className="nav-link">
                             Submit Review
                         </Link>
+                    </li>
+
+                    <li className="nav-item">
+                        {
+                            session ? (
+                                <button className='nav-link btn btn-link' onClick={() => signOut()}>Sign Out</button>
+                            ) : (
+                                <button className='nav-link btn btn-link' onClick={() => signIn("google")}>Sign In With Google</button>
+                            )
+                        }
                     </li>
                 </ul>
             </div>
