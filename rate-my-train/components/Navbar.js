@@ -34,6 +34,20 @@ export default function Navbar() {
                         </Link>
                     </li>
                 </ul>
+                <div className="my-2 my-lg-0">
+                    <ul className="navbar-nav mr-auto">
+                        <li className="nav-item">
+                            <Link href="/signup" className="btn btn-outline-success mx-2">
+                                Sign Up
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link href="/signin" className="btn btn-outline-primary mx-2">
+                                Sign In
+                            </Link>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </nav>
     );

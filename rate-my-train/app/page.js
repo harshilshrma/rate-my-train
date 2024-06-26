@@ -11,14 +11,6 @@ export default function Home() {
       <main>
         <h1>Welcome to Rate My Train</h1>
         <p>This is a simple placeholder for now. More features coming soon!</p>
-        <div>
-          <Link href="./signup">
-            Sign Up
-          </Link>
-          <Link href="/signin">
-            Sign In
-          </Link>
-        </div>
       </main>
     </div>
   );
