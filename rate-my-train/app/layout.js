@@ -14,10 +14,12 @@ export default function RootLayout({ children }) {
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           rel="stylesheet"
         />
+        
       </head>
       <body>
         <Navbar />
         {children}
+        <script src="https://accounts.google.com/gsi/client" async></script>
       </body>
     </html>
   );

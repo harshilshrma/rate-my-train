@@ -1,4 +1,8 @@
-export const metadata = {
+"use client"
+
+import { supabase } from '../../utils/supabase';
+
+const metadata = {
     title: 'Submit a Review',
 };
 
