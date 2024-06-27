@@ -8,21 +8,34 @@ const metadata = {
 };
 
 export default function SubmitReview() {
-
-    useEffect(() => {
-        const session = supabase.auth.getSession();
-        if (!session) {
-            // User is not authenticated, redirect to home page
-            window.location.href = '/';
-        }
-    }, []);
-
     const [trainId, setTrainId] = useState('');
     const [rating, setRating] = useState(1);
     const [reviewText, setReviewText] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [isValid, setIsValid] = useState(true);
+    const [trainInfo, setTrainInfo] = useState(null);
+    const [toStationCode, setToStationCode] = useState('');
+    const [fromStationCode, setFromStationCode] = useState('');
+    const [trainExists, setTrainExists] = useState(true);
+    const [authenticated, setAuthenticated] = useState(false);
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) {
+                setAuthenticated(false); // User is not authenticated
+                // Redirect to home page after a delay
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1000);
+            } else {
+                setAuthenticated(true); // User is authenticated
+            }
+        };
+
+        checkAuth();
+    }, []);
 
     const handleRatingChange = (e) => {
         const value = e.target.value;
@@ -34,10 +47,75 @@ export default function SubmitReview() {
         setRating(value);
     };
 
+    const handleTrainIdChange = async (e) => {
+        const value = e.target.value;
+        setTrainId(value); // Update trainId state with entered value
+
+        // Fetch train information from valid_trains table
+        const { data, error } = await supabase
+            .from('valid_trains')
+            .select('train_id, train_name, from_station, to_station')
+            .eq('train_id', value)
+            .single();
+
+        if (error) {
+            console.error('Error fetching train information:', error);
+            setTrainInfo(null); // Clear trainInfo state on error
+            setErrorMessage('');
+            setTrainExists(false); // Train does not exist
+            return;
+        }
+
+        if (!data) {
+            // No data found for the trainId
+            setTrainInfo(null); // Clear trainInfo state
+            setErrorMessage('Train does not exist. Please enter a valid train ID.');
+            setFromStationCode(''); // Clear station codes
+            setToStationCode(''); // Clear station codes
+            setTrainExists(false); // Train does not exist
+        } else {
+            // Set trainInfo state with fetched data
+            setTrainInfo(data);
+            setErrorMessage(''); // Clear any previous error message
+            setTrainExists(true); // Train exists
+
+            // Fetch station codes for from_station and to_station
+            const { data: fromStationData, error: fromStationError } = await supabase
+                .from('station_codes')
+                .select('station_name')
+                .eq('station_code', data.from_station)
+                .single();
+
+            const { data: toStationData, error: toStationError } = await supabase
+                .from('station_codes')
+                .select('station_name')
+                .eq('station_code', data.to_station)
+                .single();
+
+            if (fromStationData && toStationData) {
+                setFromStationCode(fromStationData.station_name);
+                setToStationCode(toStationData.station_name);
+            } else {
+                console.error('Error fetching station codes:', fromStationError || toStationError);
+            }
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrorMessage('');
         setSuccessMessage('');
+
+        if (!trainExists) {
+            setErrorMessage("We can't submit this review as the TrainID is invalid.");
+            return;
+        }
+
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+            setErrorMessage('You need to be logged in to submit a review.');
+            return;
+        }
 
         // Get the user
         const { data: { user }, error: userError } = await supabase.auth.getUser();
@@ -64,7 +142,7 @@ export default function SubmitReview() {
         if (existingReview) {
             setErrorMessage('You have already submitted a review for this train.');
             setTrainId('');
-            setRating(0);
+            setRating(1);
             setReviewText('');
             return;
         }
@@ -134,10 +212,12 @@ export default function SubmitReview() {
 
             setSuccessMessage('Review submitted successfully!');
             setTrainId('');
-            setRating(0);
+            setRating(1);
             setReviewText('');
         }
     };
+
+    const disableInputs = !authenticated;
 
     return (
         <div className="container mt-4">
@@ -148,17 +228,28 @@ export default function SubmitReview() {
 
                 <form onSubmit={handleSubmit}>
                     <div class="form-row">
-                        <div class="form-group col-md-3 mb-3">
+                        <div class="form-group col-md-4 mb-3">
                             <label htmlFor="trainId">Train Number:</label>
                             <input
                                 type="text"
-                                className="form-control"
+                                className={`form-control ${trainExists ? 'is-valid' : 'is-invalid'}`}
                                 id="trainId"
                                 name="trainId"
                                 value={trainId}
-                                onChange={(e) => setTrainId(e.target.value)}
+                                onChange={handleTrainIdChange}
                                 required
+                                disabled={disableInputs}
                             />
+                            {!trainExists && (
+                                <div className="invalid-feedback">
+                                    Train does not exist. Please enter a valid train ID.
+                                </div>
+                            )}
+                            {!trainExists && (
+                                <div className="invalid-feedback">
+                                    If your train isn't listed, we apologize. Our database is continually being updated.
+                                </div>
+                            )}
                         </div>
                         <div class="form-group col-md-3 mb-3">
                             <label htmlFor="rating">Rating:</label>
@@ -172,6 +263,7 @@ export default function SubmitReview() {
                                 value={rating}
                                 onChange={handleRatingChange}
                                 required
+                                disabled={disableInputs}
                             />
                             {!isValid && (
                                 <div className="invalid-feedback">
@@ -180,6 +272,16 @@ export default function SubmitReview() {
                             )}
                         </div>
                     </div>
+                    {trainInfo && (
+                        <span class="text-info">
+                            Submitting review for <strong>{trainInfo.train_id} - {trainInfo.train_name}</strong> running from <strong>{fromStationCode}</strong> to <strong>{toStationCode}</strong>.
+                        </span>
+                    )}
+                    {errorMessage && (
+                        <div className="invalid-feedback">
+                            {errorMessage}
+                        </div>
+                    )}
                     <div className="form-group">
                         <label htmlFor="reviewText">Review:</label>
                         <textarea
@@ -189,6 +291,7 @@ export default function SubmitReview() {
                             value={reviewText}
                             onChange={(e) => setReviewText(e.target.value)}
                             required
+                            disabled={disableInputs}
                         ></textarea>
                     </div>
 
