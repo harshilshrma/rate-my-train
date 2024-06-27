@@ -9,7 +9,7 @@ const metadata = {
 
 export default function SubmitReview() {
     const [trainId, setTrainId] = useState('');
-    const [rating, setRating] = useState(1);
+    const [rating, setRating] = useState();
     const [reviewText, setReviewText] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
@@ -107,7 +107,7 @@ export default function SubmitReview() {
         setSuccessMessage('');
 
         if (!trainExists) {
-            setErrorMessage("We can't submit this review as the TrainID is invalid.");
+            setErrorMessage("We can't submit this review because the Train ID is invalid.");
             return;
         }
 
@@ -119,7 +119,7 @@ export default function SubmitReview() {
 
         // Get the user
         const { data: { user }, error: userError } = await supabase.auth.getUser();
-        if (userError) {
+        if (!data) {
             setErrorMessage('You need to be logged in to submit a review.');
             return;
         }

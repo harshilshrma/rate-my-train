@@ -13,7 +13,8 @@ export default function Home() {
 
   useEffect(() => {
     const sessionListener = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_OUT' && window.location.pathname === '/submit-review') {
+      console.log(event, session)
+      if ((event === 'SIGNED_OUT') && window.location.pathname === '/submit-review') {
         window.location.href = '/';
       }
     });
