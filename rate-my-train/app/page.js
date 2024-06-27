@@ -1,11 +1,24 @@
-import Link from 'next/link';
+"use client"
 
-export const metadata = {
-  title: 'Rate My Train',
-  description: 'Submit and view train reviews',
-};
+import Link from 'next/link';
+import { useEffect } from 'react';
+import { supabase } from '@/utils/supabase';
+
+// export const metadata = {
+//   title: 'Rate My Train',
+//   description: 'Submit and view train reviews',
+// };
 
 export default function Home() {
+
+  useEffect(() => {
+    const sessionListener = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT' && window.location.pathname === '/submit-review') {
+        window.location.href = '/';
+      }
+    });
+  }, []);
+
   return (
     <div>
       <main>

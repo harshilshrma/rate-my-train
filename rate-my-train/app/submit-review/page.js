@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../../utils/supabase';
 
 const metadata = {
@@ -8,6 +8,15 @@ const metadata = {
 };
 
 export default function SubmitReview() {
+
+    useEffect(() => {
+        const session = supabase.auth.getSession();
+        if (!session) {
+            // User is not authenticated, redirect to home page
+            window.location.href = '/';
+        }
+    }, []);
+
     const [trainId, setTrainId] = useState('');
     const [rating, setRating] = useState(1);
     const [reviewText, setReviewText] = useState('');
