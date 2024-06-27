@@ -38,31 +38,32 @@ const GoogleSignIn = () => {
             }
         };
         document.head.appendChild(script);
-    }, []);
 
-    // Define the handleSignInWithGoogle function globally
-    window.handleSignInWithGoogle = async (response) => {
-        console.log('Google sign-in response:', response);
 
-        if (response.credential) {
-            const { data, session, error } = await supabase.auth.signInWithIdToken({
-                provider: 'google',
-                token: response.credential,
-            });
+        // Define the handleSignInWithGoogle function globally
+        window.handleSignInWithGoogle = async (response) => {
+            console.log('Google sign-in response:', response);
 
-            if (error) {
-                console.error('Sign in error:', error);
-            } else {
-                console.log('Sign in data:', data);
-                setUserData({
-                    name: data.user.user_metadata.full_name,
-                    profileImage: data.user.user_metadata.avatar_url,
+            if (response.credential) {
+                const { data, session, error } = await supabase.auth.signInWithIdToken({
+                    provider: 'google',
+                    token: response.credential,
                 });
+
+                if (error) {
+                    console.error('Sign in error:', error);
+                } else {
+                    console.log('Sign in data:', data);
+                    setUserData({
+                        name: data.user.user_metadata.full_name,
+                        profileImage: data.user.user_metadata.avatar_url,
+                    });
+                }
+            } else {
+                console.error('No credential received from Google sign-in');
             }
-        } else {
-            console.error('No credential received from Google sign-in');
-        }
-    };
+        };
+    }, []);
 
     return (
         <div>

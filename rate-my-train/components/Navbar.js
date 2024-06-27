@@ -26,10 +26,6 @@ export default function Navbar() {
                 setUser(null);
             }
         });
-
-        // return () => {
-        //     authListener.unsubscribe();
-        // };
     }, []);
 
     const handleSignOut = async () => {
