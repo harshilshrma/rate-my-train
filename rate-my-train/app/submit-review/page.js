@@ -13,7 +13,7 @@ export default function SubmitReview() {
     const [reviewText, setReviewText] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
-    const [isValid, setIsValid] = useState(false); 
+    const [isValid, setIsValid] = useState(true);
 
     const handleRatingChange = (e) => {
         const value = e.target.value;
@@ -54,6 +54,9 @@ export default function SubmitReview() {
 
         if (existingReview) {
             setErrorMessage('You have already submitted a review for this train.');
+            setTrainId('');
+            setRating(0);
+            setReviewText('');
             return;
         }
 
@@ -122,7 +125,7 @@ export default function SubmitReview() {
 
             setSuccessMessage('Review submitted successfully!');
             setTrainId('');
-            setRating(1);
+            setRating(0);
             setReviewText('');
         }
     };
@@ -133,39 +136,41 @@ export default function SubmitReview() {
                 <h1>Submit a Review</h1>
                 {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
                 {successMessage && <div className="alert alert-success">{successMessage}</div>}
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="trainId">Train Number:</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="trainId"
-                            name="trainId"
-                            value={trainId}
-                            onChange={(e) => setTrainId(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="rating">Rating:</label>
-                        <input
-                            type="number"
-                            className={`form-control ${isValid ? 'is-valid' : 'is-invalid'}`}
-                            id="rating"
-                            name="rating"
-                            min="1"
-                            max="5"
-                            value={rating}
-                            onChange={handleRatingChange}
-                            required
-                        />
-                        {!isValid && (
-                            <div className="invalid-feedback">
-                                Please enter a rating between 1 and 5.
-                            </div>
-                        )}
-                    </div>
 
+                <form onSubmit={handleSubmit}>
+                    <div class="form-row">
+                        <div class="form-group col-md-3 mb-3">
+                            <label htmlFor="trainId">Train Number:</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="trainId"
+                                name="trainId"
+                                value={trainId}
+                                onChange={(e) => setTrainId(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div class="form-group col-md-3 mb-3">
+                            <label htmlFor="rating">Rating:</label>
+                            <input
+                                type="number"
+                                className={`form-control ${isValid ? 'is-valid' : 'is-invalid'}`}
+                                id="rating"
+                                name="rating"
+                                min="1"
+                                max="5"
+                                value={rating}
+                                onChange={handleRatingChange}
+                                required
+                            />
+                            {!isValid && (
+                                <div className="invalid-feedback">
+                                    Please enter a rating between 1 and 5.
+                                </div>
+                            )}
+                        </div>
+                    </div>
                     <div className="form-group">
                         <label htmlFor="reviewText">Review:</label>
                         <textarea
@@ -177,7 +182,9 @@ export default function SubmitReview() {
                             required
                         ></textarea>
                     </div>
+
                     <button type="submit" className="btn btn-primary">Submit Review</button>
+
                 </form>
             </main>
         </div>
