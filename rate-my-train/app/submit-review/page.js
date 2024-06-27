@@ -119,7 +119,7 @@ export default function SubmitReview() {
 
         // Get the user
         const { data: { user }, error: userError } = await supabase.auth.getUser();
-        if (!data) {
+        if (userError) {
             setErrorMessage('You need to be logged in to submit a review.');
             return;
         }
@@ -231,7 +231,7 @@ export default function SubmitReview() {
                         <div class="form-group col-md-4 mb-3">
                             <label htmlFor="trainId">Train Number:</label>
                             <input
-                                type="text"
+                                type="number"
                                 className={`form-control ${trainExists ? 'is-valid' : 'is-invalid'}`}
                                 id="trainId"
                                 name="trainId"
@@ -274,7 +274,7 @@ export default function SubmitReview() {
                     </div>
                     {trainInfo && (
                         <span class="text-info">
-                            Submitting review for <strong>{trainInfo.train_id} - {trainInfo.train_name}</strong> running from <strong>{fromStationCode}</strong> to <strong>{toStationCode}</strong>.
+                            Submitting a review for <strong>{trainInfo.train_id} - {trainInfo.train_name}</strong> running from <strong>{fromStationCode}</strong> to <strong>{toStationCode}</strong>.
                         </span>
                     )}
                     {errorMessage && (

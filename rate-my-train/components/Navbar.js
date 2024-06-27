@@ -64,6 +64,13 @@ export default function Navbar() {
                             </Link>
                         </li>
                     )}
+                    {user && (
+                        <li className="nav-item">
+                            <Link href="/check-reviews" className="nav-link">
+                                Check Reviews
+                            </Link>
+                        </li>
+                    )}
                 </ul>
                 <div className="my-2 my-lg-0">
                     <ul className="navbar-nav mr-auto">
