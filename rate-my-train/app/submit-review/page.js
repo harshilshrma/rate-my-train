@@ -28,7 +28,7 @@ export default function SubmitReview() {
                 // Redirect to home page after a delay
                 setTimeout(() => {
                     window.location.href = '/';
-                }, 1000);
+                }, 500);
             } else {
                 setAuthenticated(true); // User is authenticated
             }

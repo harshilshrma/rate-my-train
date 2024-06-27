@@ -14,18 +14,33 @@ export default function Home() {
   useEffect(() => {
     const sessionListener = supabase.auth.onAuthStateChange((event, session) => {
       console.log(event, session)
-      if ((event === 'SIGNED_OUT') && window.location.pathname === '/submit-review') {
+      if ((event === 'SIGNED_OUT') && (window.location.pathname === '/submit-review' || window.location.pathname === '/check-reviews')) {
         window.location.href = '/';
       }
     });
   }, []);
 
   return (
-    <div>
-      <main>
-        <h1>Welcome to Rate My Train</h1>
-        <p>This is a simple placeholder for now. More features coming soon!</p>
+    <div className="container mt-4">
+      <main className="text-left">
+        <h1 className="mb-4">Wish I Could Rate This Train Somewhere!</h1>
+        <div>
+          <p className="lead">Yes, I've had that exact thought. Ever boarded a train expecting a smooth ride and ended up regretting your decision? Been there, built <strong>RateMyTrain</strong> <del>to vent</del> so you can choose the rails wisely.</p>
+        </div>
+        <div>
+          <p className="lead">It's your place to share honest reviews, helping others avoid <small><em>shitty</em></small> trains.</p>
+        </div>
+
+        <p className="lead">Join me in shaping better journeys for everyone!</p>
+
+
+        <p className='text-right text-danger'><small>Sign In With Google to Submit or Check reviews.</small></p>
+
+
       </main>
+      <footer className=" fixed-bottom text-center mb-4">
+        <p>Made with ❤️ by <a href="https://x.com/harshilshrma" target="_blank" rel="noopener noreferrer">Harshil ➚</a></p>
+      </footer>
     </div>
   );
 }

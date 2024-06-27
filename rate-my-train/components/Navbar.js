@@ -37,7 +37,7 @@ export default function Navbar() {
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <Link href="/" className="navbar-brand">
-                Rate My Train
+                RateMyTrain
             </Link>
             <button
                 className="navbar-toggler"
