@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { supabase } from '@/utils/supabase';
+import { Button } from '@/components/ui/button';
 
 // export const metadata = {
 //   title: 'Rate My Train',
@@ -25,6 +26,7 @@ export default function Home() {
       <main>
         <h1>Welcome to Rate My Train</h1>
         <p>This is a simple placeholder for now. More features coming soon!</p>
+        <Button>Hello click me</Button>
       </main>
     </div>
   );
