@@ -53,7 +53,7 @@ export default function Home() {
 
 
       </main>
-      <footer className=" fixed-bottom text-center mb-4">
+      <footer className="footer">
         <p>Made with ❤️ by <a href="https://x.com/harshilshrma" target="_blank" rel="noopener noreferrer">Harshil ➚</a></p>
       </footer>
     </div>

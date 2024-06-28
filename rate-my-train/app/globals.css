@@ -42,3 +42,17 @@ form button {
 form button:hover {
   background-color: #0056b3;
 }
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 85vh;
+}
+
+main {
+  flex: 1;
+}
+
+.footer {
+  text-align: center;
+}
