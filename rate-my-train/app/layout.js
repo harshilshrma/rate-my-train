@@ -4,7 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata = {
-  title: 'Rate My Train',
+  title: 'RateMyTrain',
   description: 'Submit and view train reviews',
 };
 
