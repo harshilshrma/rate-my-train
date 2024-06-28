@@ -16,8 +16,6 @@ export default function SubmitReview() {
     const [successMessage, setSuccessMessage] = useState('');
     const [isValid, setIsValid] = useState(true);
     const [trainInfo, setTrainInfo] = useState(null);
-    const [toStationCode, setToStationCode] = useState('');
-    const [fromStationCode, setFromStationCode] = useState('');
     const [trainExists, setTrainExists] = useState(true);
     const [authenticated, setAuthenticated] = useState(false);
 
@@ -71,34 +69,12 @@ export default function SubmitReview() {
             // No data found for the trainId
             setTrainInfo(null); // Clear trainInfo state
             setErrorMessage('Train does not exist. Please enter a valid train ID.');
-            setFromStationCode(''); // Clear station codes
-            setToStationCode(''); // Clear station codes
             setTrainExists(false); // Train does not exist
         } else {
             // Set trainInfo state with fetched data
             setTrainInfo(data);
             setErrorMessage(''); // Clear any previous error message
             setTrainExists(true); // Train exists
-
-            // Fetch station codes for from_station and to_station
-            const { data: fromStationData, error: fromStationError } = await supabase
-                .from('station_codes')
-                .select('station_name')
-                .eq('station_code', data.from_station)
-                .single();
-
-            const { data: toStationData, error: toStationError } = await supabase
-                .from('station_codes')
-                .select('station_name')
-                .eq('station_code', data.to_station)
-                .single();
-
-            if (fromStationData && toStationData) {
-                setFromStationCode(fromStationData.station_name);
-                setToStationCode(toStationData.station_name);
-            } else {
-                console.error('Error fetching station codes:', fromStationError || toStationError);
-            }
         }
     };
 
@@ -275,7 +251,7 @@ export default function SubmitReview() {
                     </div>
                     {trainInfo && (
                         <span class="text-info">
-                            Submitting a review for <strong>{trainInfo.train_id} - {trainInfo.train_name}</strong> running from <strong>{fromStationCode}</strong> to <strong>{toStationCode}</strong>.
+                            Submitting a review for <strong>{trainInfo.train_id} - {trainInfo.train_name}</strong> running from <strong> {trainInfo.from_station} </strong> to <strong>{trainInfo.to_station}</strong>.
                         </span>
                     )}
                     {errorMessage && (
@@ -297,6 +273,7 @@ export default function SubmitReview() {
                     </div>
 
                     <button type="submit" className="btn btn-primary">Submit Review</button>
+                    <p style={{ marginTop: '2rem' }} className='text-left text-info'><strong>Upcoming Feature:</strong> Submit a review by your PNR Number!</p>
 
                 </form>
             </main>
