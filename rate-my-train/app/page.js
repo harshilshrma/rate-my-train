@@ -1,7 +1,6 @@
 "use client"
 
-import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase';
 
 // export const metadata = {
@@ -11,13 +10,25 @@ import { supabase } from '@/utils/supabase';
 
 export default function Home() {
 
+  const [session, setSession] = useState(null);
+
   useEffect(() => {
-    const sessionListener = supabase.auth.onAuthStateChange((event, session) => {
+
+    const fetchSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setSession(session);
+    };
+
+    fetchSession();
+
+    const { data: subscription } = supabase.auth.onAuthStateChange((event, session) => {
       console.log(event, session)
+      setSession(session);
       if ((event === 'SIGNED_OUT') && (window.location.pathname === '/submit-review' || window.location.pathname === '/check-reviews')) {
         window.location.href = '/';
       }
     });
+
   }, []);
 
   return (
@@ -34,7 +45,11 @@ export default function Home() {
         <p className="lead">Join me in shaping better journeys for everyone!</p>
 
 
-        <p className='text-right text-danger'><small>Sign In With Google to Submit or Check reviews.</small></p>
+        {!session && (
+          <p className='text-right text-danger'>
+            <small>Sign In With Google to Submit or Check reviews.</small>
+          </p>
+        )}
 
 
       </main>
