@@ -7,6 +7,7 @@ const metadata = {
     title: 'Submit a Review',
 };
 
+
 export default function SubmitReview() {
     const [trainId, setTrainId] = useState('');
     const [rating, setRating] = useState();
