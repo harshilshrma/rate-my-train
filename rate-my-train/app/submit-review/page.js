@@ -229,7 +229,7 @@ export default function SubmitReview() {
                             )}
                         </div>
                         <div class="form-group col-md-3 mb-3">
-                            <label htmlFor="rating">Rating:</label>
+                            <label htmlFor="rating">Rating: <small>(out of 5)</small></label>
                             <input
                                 type="number"
                                 className={`form-control ${isValid ? 'is-valid' : 'is-invalid'}`}
@@ -260,20 +260,19 @@ export default function SubmitReview() {
                         </div>
                     )}
                     <div className="form-group">
-                        <label htmlFor="reviewText">Review:</label>
+                        <label htmlFor="reviewText">Review: <small>(optional)</small></label>
                         <textarea
                             className="form-control"
                             id="reviewText"
                             name="reviewText"
                             value={reviewText}
                             onChange={(e) => setReviewText(e.target.value)}
-                            required
                             disabled={disableInputs}
                         ></textarea>
                     </div>
 
                     <button type="submit" className="btn btn-primary">Submit Review</button>
-                    <p style={{ marginTop: '2rem' }} className='text-left text-info'><strong>Upcoming Feature:</strong> Submit a review by your PNR Number!</p>
+                    <p style={{ marginTop: '2rem' }} className='text-left text-success'><strong>Upcoming Feature:</strong> Submit a review by your PNR Number!</p>
 
                 </form>
             </main>
