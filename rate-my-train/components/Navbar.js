@@ -73,7 +73,7 @@ export default function Navbar() {
                     )}
                 </ul>
                 <div className="my-2 my-lg-0">
-                    <ul className="navbar-nav mr-auto">
+                    <ul className="navbar-nav ml-auto">
                         {user ? (
                             <li className="nav-item">
                                 <div className="d-flex align-items-center">
