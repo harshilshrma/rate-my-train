@@ -47,7 +47,7 @@ export default function Home() {
 
         {!session && (
           <p className='text-right text-danger'>
-            <small>Sign In With Google to Submit or Check reviews.</small>
+            <small>Head over to the dropdown above, sign in with Google, and start submitting or checking reviews!</small>
           </p>
         )}
 
